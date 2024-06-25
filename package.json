@@ -1,0 +1,17 @@
+{
+  "name": "taskly-mono",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://mattiag96@github.com/MattiaG96/taskly-mono.git",
+  "author": "Mattia Garreffa <mattia@mdbtechsolutions.com>",
+  "license": "ISC",
+  "private": true,
+  "type": "module",
+  "packageManager": "yarn@1.22.22",
+  "workspaces": [
+    "./apps/**/**"
+  ],
+  "scripts": {
+    "dev": "turbo run dev"
+  }
+}
