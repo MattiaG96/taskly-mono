@@ -1,14 +1,20 @@
+import { config } from 'dotenv';
 import express from 'express';
+config({
+  path: '../../.env',
+});
+import { seed } from './seed';
 
 const app = express();
-const PORT = 8000;
+const { EXPRESS_PORT } = process.env;
 
-app.use('/api', (req, res) => {
-  res.status(200).json({ message: 'Hello World!' });
+app.use('/api', async (req, res) => {
+  const response = await seed();
+  res.status(200).json(response);
 });
 
 app.use('*', (req, res) => {
   res.status(404).json({ message: 'Not found' });
 });
 
-app.listen(PORT, () => console.log(`Server listening on port ${PORT}`));
+app.listen(EXPRESS_PORT, () => console.log(`Server listening on port ${EXPRESS_PORT}`));
