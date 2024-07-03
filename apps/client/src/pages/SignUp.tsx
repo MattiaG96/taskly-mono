@@ -13,6 +13,7 @@ import { FC } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { Link } from 'react-router-dom';
+import { API_BASE_URL } from '../utils';
 
 const SignUp: FC = () => {
   const {
@@ -21,8 +22,27 @@ const SignUp: FC = () => {
     formState: { errors, isSubmitting },
   } = useForm();
 
-  const doSubmit = () =>
-    toast.success('Sign Up Successful. You are now logged in');
+  const doSubmit = async (values) => {
+    try {
+      const res = await fetch(`${API_BASE_URL}/auth/signup`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(values),
+        credentials: 'include',
+      });
+      const data = await res.json();
+      if (res.status === 200) {
+        toast.success('Sign Up Successfull. You are logged in now');
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error('Something went wrong');
+    }
+  };
+
   return (
     <Box p="3" maxW="lg" mx="auto">
       <Heading
