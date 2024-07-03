@@ -14,8 +14,12 @@ import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { Link } from 'react-router-dom';
 import { API_BASE_URL } from '../utils';
+import { useUser } from '../context/UserContext';
+import { UserModel } from '../models/UserModel';
+import { Router } from '../navigation/Router';
 
 const SignUp: FC = () => {
+  const { updateUser } = useUser();
   const {
     handleSubmit,
     register,
@@ -35,11 +39,13 @@ const SignUp: FC = () => {
       const data = await res.json();
       if (res.status === 200) {
         toast.success('Sign Up Successfull. You are logged in now');
+        updateUser(data as UserModel);
+        Router.goToProfile();
       } else {
         toast.error(data.message);
       }
-    } catch (error) {
-      toast.error('Something went wrong');
+    } catch (error: any) {
+      toast.error(error);
     }
   };
 
