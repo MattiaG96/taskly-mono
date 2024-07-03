@@ -5,11 +5,6 @@ import bcrypt from 'bcrypt';
 
 const collection = db.collection('users');
 
-export const userControllerTest = async (req: Request, res: Response) => {
-  let results = await collection.find({}).toArray();
-  res.status(200).json(results);
-};
-
 export const getUser = async (
   req: Request,
   res: Response,
@@ -19,7 +14,11 @@ export const getUser = async (
     const query = { _id: new ObjectId(req.params.id) };
     const user = await collection.findOne(query);
 
-    if (!user) return next({ status: 404, message: 'User not found!' });
+    if (!user)
+      return next({
+        status: 404,
+        message: 'User not found!',
+      });
 
     res.status(200).json(user);
   } catch (error) {
