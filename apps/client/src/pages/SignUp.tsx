@@ -8,11 +8,11 @@ import {
   Input,
   Stack,
   Text,
+  Link,
 } from '@chakra-ui/react';
 import { FC } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { Link } from 'react-router-dom';
 import { API_BASE_URL } from '../utils';
 import { useUser } from '../context/UserContext';
 import { UserModel } from '../models/UserModel';
@@ -56,7 +56,7 @@ const SignUp: FC = () => {
         textAlign="center"
         fontSize="3xl"
         fontWeight="semibold"
-        marginBottom="10"
+        my="7"
       >
         Create an account
       </Heading>
@@ -107,7 +107,7 @@ const SignUp: FC = () => {
       </form>
       <Flex gap="2" mt="5">
         <Text>Have an account?</Text>
-        <Link to="/signin">
+        <Link onClick={() => Router.goToSignIn()}>
           <Text as="span" color="blue.400">
             Sign in
           </Text>

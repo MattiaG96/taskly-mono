@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { useUser } from '../context/UserContext';
-import { API_BASE_URL } from '../utils';
+import { API_BASE_URL, useLocalStorage } from '../utils';
 import toast from 'react-hot-toast';
 import { Router } from '../navigation/Router';
 import {
@@ -17,7 +17,8 @@ import {
 import { Link as RouterLink } from 'react-router-dom';
 
 const NavBar: FC = () => {
-  const { user, updateUser } = useUser();
+  const { user } = useUser();
+  const { clearValue } = useLocalStorage('taskly_user', null);
 
   const handleSignOut = async () => {
     try {
@@ -26,6 +27,7 @@ const NavBar: FC = () => {
       });
       const message = await res.json();
       toast.success(message);
+      clearValue();
       Router.goToLanding();
     } catch (error: any) {
       console.log(error);

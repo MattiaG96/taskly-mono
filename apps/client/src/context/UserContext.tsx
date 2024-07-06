@@ -1,5 +1,6 @@
-import { createContext, FC, ReactNode, useContext, useState } from 'react';
+import { createContext, FC, ReactNode, useContext } from 'react';
 import { UserModel } from '../models/UserModel';
+import { useLocalStorage } from '../utils';
 
 const voidFunction: (user: UserModel) => void = () => undefined;
 
@@ -14,7 +15,10 @@ interface UserProvideProps {
 }
 
 const UserProvider: FC<UserProvideProps> = ({ children }) => {
-  const [user, setUser] = useState<UserModel>();
+  const { value: user, setValue: setUser } = useLocalStorage(
+    'taskly_user',
+    null,
+  );
   const updateUser = (value: UserModel) => setUser(value);
   const contextValue = {
     user,
