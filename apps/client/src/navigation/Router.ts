@@ -6,4 +6,8 @@ export const setUpNavigation = (navFuntion: NavigateFunction) =>
 
 export const Router = {
   goToProfile: () => navigator('/profile', { replace: true }),
+  goToLanding: () => navigator('/', { replace: true }),
+  goToSignIn: () => navigator('/signin', { replace: true }),
+  goToSignOut: () => navigator('/signout', { replace: true }),
+  goToTasks: () => navigator('/tasks', { replace: true }),
 };
