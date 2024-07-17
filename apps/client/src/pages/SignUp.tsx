@@ -24,9 +24,15 @@ const SignUp: FC = () => {
     handleSubmit,
     register,
     formState: { errors, isSubmitting },
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      username: '',
+      email: '',
+      password: '',
+    },
+  });
 
-  const doSubmit = async (values) => {
+  const doSubmit = async (values: any) => {
     try {
       const res = await fetch(`${API_BASE_URL}/auth/signup`, {
         method: 'POST',

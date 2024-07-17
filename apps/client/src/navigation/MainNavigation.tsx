@@ -6,6 +6,10 @@ import SignUp from '../pages/SignUp';
 import PrivateRoute from '../components/PrivateRoute';
 import Profile from '../pages/Profile';
 import { setUpNavigation } from './Router';
+import CreateTask from '../pages/CreateTask';
+import UpdateTask from '../pages/UpdateTask';
+import Tasks from '../pages/Tasks';
+import SingleTask from '../pages/SingleTask';
 
 const MainNavigation: FC = () => {
   const navigate = useNavigate();
@@ -18,6 +22,10 @@ const MainNavigation: FC = () => {
 
       <Route element={<PrivateRoute />}>
         <Route path="/profile" element={<Profile />} />
+        <Route path="/create-task" element={<CreateTask />} />
+        <Route path="/update-task/:taskId" element={<UpdateTask />} />
+        <Route path="/tasks" element={<Tasks />} />
+        <Route path="/tasks/:taskId" element={<SingleTask />} />
       </Route>
     </Routes>
   );

@@ -2,7 +2,7 @@ import { createContext, FC, ReactNode, useContext } from 'react';
 import { UserModel } from '../models/UserModel';
 import { useLocalStorage } from '../utils';
 
-const voidFunction: (user: UserModel) => void = () => undefined;
+const voidFunction: (user: UserModel | null) => void = () => undefined;
 
 const contextDefault = {
   user: {} as UserModel | undefined,
@@ -19,7 +19,7 @@ const UserProvider: FC<UserProvideProps> = ({ children }) => {
     'taskly_user',
     null,
   );
-  const updateUser = (value: UserModel) => setUser(value);
+  const updateUser = (value: UserModel | null) => setUser(value);
   const contextValue = {
     user,
     updateUser,
