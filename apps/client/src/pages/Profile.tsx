@@ -1,30 +1,30 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { useUser } from '../context/UserContext';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { API_BASE_URL } from '../utils';
 import toast from 'react-hot-toast';
 import { Router } from '../navigation/Router';
 import {
   Box,
   Button,
-  Center,
   Flex,
   FormControl,
   FormErrorMessage,
   Heading,
-  Image,
   Input,
   Stack,
   Text,
   useDisclosure,
 } from '@chakra-ui/react';
 import { DeleteConfirmation } from '../components/DeleteConfirmation';
+import { AvatarUploader } from '../components/AvatarUploader';
 
 const Profile: FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { user, updateUser } = useUser();
 
   const {
+    control,
     register,
     handleSubmit,
     resetField,
@@ -38,11 +38,19 @@ const Profile: FC = () => {
     },
   });
 
+  const [files, setFiles] = useState<File[]>([]);
+
   const handleNewTask = () => undefined;
   const handleTasks = () => undefined;
 
   const doSubmit = async (values: any) => {
     try {
+      if (files.length > 0) {
+        const newUrl = await handleFileUpload(files);
+        if (newUrl) {
+          values.avatar = newUrl;
+        }
+      }
       const res = await fetch(`${API_BASE_URL}/users/update/${user?._id}`, {
         method: 'PATCH',
         credentials: 'include',
@@ -97,6 +105,23 @@ const Profile: FC = () => {
     }
   };
 
+  const handleFileUpload = async (files: File[]) => {
+    const formData = new FormData();
+    formData.append('image', files[0]);
+    try {
+      const res = await fetch(`${API_BASE_URL}/image/upload`, {
+        method: 'POST',
+        credentials: 'include',
+        body: formData,
+      });
+      const response = await res.json();
+      return response.imageUrl;
+    } catch (error: any) {
+      console.log(error);
+      new Error(error);
+    }
+  };
+
   return (
     <Box p="3" maxW="lg" mx="auto">
       <DeleteConfirmation
@@ -116,18 +141,18 @@ const Profile: FC = () => {
       </Heading>
       <form onSubmit={handleSubmit(doSubmit)}>
         <Stack gap="4">
-          <Center>
-            <Image
-              alt="profile"
-              rounded="full"
-              h="24"
-              w="24"
-              objectFit="cover"
-              cursor="pointer"
-              mt="2"
-              src={user?.avatar}
-            />
-          </Center>
+          <Controller
+            name="avatar"
+            control={control}
+            rules={{ required: true }}
+            render={({ field }) => (
+              <AvatarUploader
+                onFieldChange={field.onChange}
+                imageUrl={field.value}
+                setFiles={setFiles}
+              />
+            )}
+          />
           <FormControl isInvalid={Boolean(errors.username)}>
             <Input
               id="username"

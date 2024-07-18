@@ -2,6 +2,7 @@ import { Response, Request, NextFunction } from 'express';
 import { db } from '../lib/dbConnect';
 import { FindOneAndUpdateOptions, ObjectId } from 'mongodb';
 import bcrypt from 'bcrypt';
+import { UserRequest } from '../lib/middleware';
 
 const collection = db.collection('users');
 
@@ -27,11 +28,11 @@ export const getUser = async (
 };
 
 export const updateUser = async (
-  req: Request,
+  req: UserRequest,
   res: Response,
   next: NextFunction,
 ) => {
-  if (req.body.user.id !== req.params.id) {
+  if (req.user.id !== req.params.id) {
     return next({
       status: 401,
       message: 'You can only update your own account',
@@ -58,7 +59,7 @@ export const updateUser = async (
         status: 500,
         message: 'Something went wrong updating the data',
       });
-    updatedUser.password = '***';
+    updatedUser.password = '';
     res.status(200).json(updatedUser);
   } catch (error) {
     next({
@@ -69,11 +70,11 @@ export const updateUser = async (
 };
 
 export const deleteUser = async (
-  req: Request,
+  req: UserRequest,
   res: Response,
   next: NextFunction,
 ) => {
-  if (req.body.user.id !== req.params.id) {
+  if (req.user.id !== req.params.id) {
     return next({
       status: 401,
       message: 'You can only delete your own account',

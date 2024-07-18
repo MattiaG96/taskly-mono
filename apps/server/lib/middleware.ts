@@ -27,8 +27,12 @@ export const errorHandling = (
   });
 };
 
+export interface UserRequest extends Request {
+  user?: any;
+}
+
 export const verifyToken = (
-  req: Request,
+  req: UserRequest,
   res: Response,
   next: NextFunction,
 ) => {
@@ -38,7 +42,7 @@ export const verifyToken = (
 
   jwt.verify(token, process.env.AUTH_SECRET ?? '', (error: any, user: any) => {
     if (error) return next({ status: 403, message: 'Forbidden' });
-    req.body.user = user;
+    req.user = user;
     next();
   });
 };
